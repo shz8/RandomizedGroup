@@ -8,10 +8,10 @@ let lasts = "话说宝玉正自发怔不想黛玉将手帕子扔了来正碰在�
 let samples = getSamples(1000);
 let groups = [];
 
-//simpleRandom(2)
-//blockRandom();
-//stratifiedRandom();
-dynamicRandom()
+//simpleRandom(2);//简单随
+//blockRandom();//分区
+//stratifiedRandom();//分层
+dynamicRandom()//动态（最小化）
 //分层
 function stratifiedRandom() {
   samples = getSamples(1000);
