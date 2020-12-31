@@ -28,14 +28,16 @@ function stratifiedRandom() {
 }
 //动态
 function dynamicRandom() {
-  samples = getSamples(4 * 60);
-  console.log(samples)
+  samples = getSamples(4 * 10000 - 1);
+  //console.log(samples)
   console.log(`sampleCount=${samples.length}`)
   let dyncFieds = [
     { name: 'age', type: 'int', condition: '18]|(18,60)|[60', weight: 1 },
     { name: 'sex', type: 'enum', condition: sexs.join('|'), weight: 2 },
     { name: 'stage', type: 'enum', condition: stages.join('|'), weight: 3 }]
-  groups = index.dynamicRandom({ dyncFieds, samples, groupNum: 4 })//, type: 'standardDev'}) //type只支持standardDev（标准差，默认）和rangeMethod（极差法）
+  let groupProportion = [1,2] //分组比例2:1:3表示为[2,1,3]，groupProportion.length>groupNum，那么groupNum=groupProportion.lenght，groupProportion.length<groupNum，那么右侧补1,1(即默认比例为1)
+  let p = 0.85 //偏倚分配概率。应该在 1/groupNum<= p <= 1之间，p=1/groupNum为简单随机；p=1为确定分配到最小
+  groups = index.dynamicRandom({ dyncFieds, samples, groupNum: 4 ,groupProportion , p})//, type: 'standardDev'}) //type只支持standardDev（标准差，默认）和rangeMethod（极差法）
   printGroups();
 }
 //区组
@@ -59,9 +61,9 @@ function simpleRandom(groupNum) {
 function printGroups() {
   if (groups && groups.length > 0) {
     index.addNOforSamples(groups, 5);
-    for (let idx = 0; idx < groups.length; idx++) {
+    /*for (let idx = 0; idx < groups.length; idx++) {
       console.log(groups[idx]);
-    }
+    }*/
     for (let idx = 0; idx < groups.length; idx++) {
       console.log(groups[idx].length);
     }
