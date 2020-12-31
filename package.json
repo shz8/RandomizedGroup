@@ -1,6 +1,6 @@
 {
   "name": "randomizedgroup1",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "{**When you're done, you can delete the content in this README and update the file with details for others getting started with your repository**}",
   "main": "lib/index.js",
   "scripts": {
@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "numbers": "^0.7.0",
     "utility": "^1.17.0"
   }
 }
