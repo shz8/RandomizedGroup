@@ -35,9 +35,10 @@ function dynamicRandom() {
     { name: 'age', type: 'int', condition: '18]|(18,60)|[60', weight: 1 },
     { name: 'sex', type: 'enum', condition: sexs.join('|'), weight: 2 },
     { name: 'stage', type: 'enum', condition: stages.join('|'), weight: 3 }]
-  let groupProportion = [1, 2] //分组比例2:1:3表示为[2,1,3]，groupProportion.length>groupNum，那么groupNum=groupProportion.lenght，groupProportion.length<groupNum，那么右侧补1,1(即默认比例为1)
-  let p = 1 //偏倚分配概率。应该在 1/groupNum<= p <= 1之间，p=1/groupNum为简单随机；p=1为确定分配到最小
-  for (let idx = 0; idx < 5; idx++) {//p=1时比较确定，相同因素水平值比较稳定，只是分组顺序不同；p<1时因有偏倚概率，因素水平值会有些许差异
+  let groupProportion = [1, 3] //组间比例2:1:3表示为[2,1,3]，groupProportion.length>groupNum，那么groupNum=groupProportion.lenght，groupProportion.length<groupNum，那么右侧补1,1(即默认比例为1)
+  let p = 0.86 //偏倚分配概率。应该在 1/groupNum<= p <= 1之间，p=1/groupNum为简单随机；p=1为确定分配到最小
+  for (let idx = 0; idx < 1; idx++) {//p=1时比较确定，相同因素水平值比较稳定，只是分组顺序不同；p<1时因有偏倚概率，因素水平值会有些许偏倚
+    //groups = index.dynamicRandom1({ dyncFieds: index.clone(dyncFieds), samples, groupNum: 4, groupProportion, p ,type: 'rangeMethod'})//, type: 'standardDev'}) //type只支持standardDev（标准差，默认）和rangeMethod（极差法）
     groups = index.dynamicRandom({ dyncFieds: index.clone(dyncFieds), samples, groupNum: 4, groupProportion, p })//, type: 'standardDev'}) //type只支持standardDev（标准差，默认）和rangeMethod（极差法）
     printGroups();
   }
