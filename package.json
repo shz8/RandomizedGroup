@@ -1,10 +1,10 @@
 {
   "name": "randomizedgroup1",
-  "version": "1.0.4",
-  "description": "{**When you're done, you can delete the content in this README and update the file with details for others getting started with your repository**}",
+  "version": "1.0.5",
+  "description": "中央随机化 随机化 简单随机 分区随机 动态随机 最小化 极差法 标准差法 ",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node t"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,9 @@
   "keywords": [
     "中央随机化",
     "随机化",
+    "简单随机",
+    "分区随机",
+    "动态随机",
     "最小化",
     "极差法",
     "标准差法"
