@@ -13,7 +13,8 @@ let start = new Date()
 //simpleRandom(2);//简单随
 //blockRandom();//分区
 //stratifiedRandom();//分层
-dynamicRandom()//动态（最小化）
+//dynamicRandom()//动态（最小化）
+dynamicRandomIncrement()
 console.log(parseInt((new Date() - start) / 1000) + ':' + (new Date() - start) % 1000)
 //分层
 function stratifiedRandom() {
@@ -26,6 +27,41 @@ function stratifiedRandom() {
   groups = index.stratifiedRandom({ stratifieds, samples });
   printGroups();
 }
+//动态随机（增量）
+function dynamicRandomIncrement() {
+  samples = getSamples(4 * 100 - 1);
+  let incrementSample = getSamples(1)
+  if (incrementSample && incrementSample.length > 0)
+    incrementSample = incrementSample[0]
+  else
+    return
+  //console.log(samples)
+  console.log(`sampleCount=${samples.length}`)
+  let dyncFieds = [
+    { name: 'age', type: 'int', condition: '18]|(18,60)|[60', weight: 1 },
+    { name: 'sex', type: 'enum', condition: sexs.join('|'), weight: 2 },
+    { name: 'stage', type: 'enum', condition: stages.join('|'), weight: 3 }]
+
+  let p = 0.86 //偏倚分配概率。应该在 1/groupNum<= p <= 1之间，p=1/groupNum为简单随机；p=1为确定分配到最小
+
+  groups = index.dynamicRandom({ dyncFieds: index.clone(dyncFieds), samples, groupNum: 3, groupProportion: null, p })//, type: 'standardDev'}) //type只支持standardDev（标准差，默认）和rangeMethod（极差法）
+  let sampleGroups = []
+  let newSamples = []
+  index.addNOforSamples(groups, 5);
+  if (groups && groups.length > 0) {
+    for (let i = 0; i < groups.length; i++) {
+      if (groups[i].length > 0) {
+        sampleGroups.push(groups[i][0].groupNO)
+      }
+      newSamples.push.apply(newSamples, groups[i]);
+    }
+  }
+  for (let idx = 0; idx < 10; idx++) {
+    let smp = index.dynamicRandomIncrement({ dyncFieds: index.clone(dyncFieds), samples: newSamples, incrementSample, groups: sampleGroups, p })
+    //groups = index.dynamicRandom({ dyncFieds: index.clone(dyncFieds), samples, groupNum: 4, groupProportion, p })//, type: 'standardDev'}) //type只支持standardDev（标准差，默认）和rangeMethod（极差法）
+    console.log('incrementSample', smp)
+  }
+}
 //动态
 function dynamicRandom() {
   samples = getSamples(4 * 1000 - 1);
@@ -37,9 +73,9 @@ function dynamicRandom() {
     { name: 'stage', type: 'enum', condition: stages.join('|'), weight: 3 }]
   let groupProportion = [1, 3] //组间比例2:1:3表示为[2,1,3]，groupProportion.length>groupNum，那么groupNum=groupProportion.lenght，groupProportion.length<groupNum，那么右侧补1,1(即默认比例为1)
   let p = 0.86 //偏倚分配概率。应该在 1/groupNum<= p <= 1之间，p=1/groupNum为简单随机；p=1为确定分配到最小
-  
+
   for (let idx = 0; idx < 1; idx++) {//p=1时比较确定，相同因素水平值比较稳定，只是分组顺序不同；p<1时因有偏倚概率，因素水平值会有些许偏倚
-    groups = index.dynamicRandom({ dyncFieds: index.clone(dyncFieds), samples, groupNum: 4, groupProportion, p ,type: 'rangeMethod'})//, type: 'standardDev'}) //type只支持standardDev（标准差，默认）和rangeMethod（极差法）
+    groups = index.dynamicRandom({ dyncFieds: index.clone(dyncFieds), samples, groupNum: 4, groupProportion, p, type: 'rangeMethod' })//, type: 'standardDev'}) //type只支持standardDev（标准差，默认）和rangeMethod（极差法）
     //groups = index.dynamicRandom({ dyncFieds: index.clone(dyncFieds), samples, groupNum: 4, groupProportion, p })//, type: 'standardDev'}) //type只支持standardDev（标准差，默认）和rangeMethod（极差法）
     printGroups();
   }
