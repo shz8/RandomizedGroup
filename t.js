@@ -29,7 +29,7 @@ function stratifiedRandom() {
 }
 //动态随机（增量）
 function dynamicRandomIncrement() {
-  samples = getSamples(4 * 100 - 1);
+  samples = getSamples(4 * 300 );
   let incrementSample = getSamples(1)
   if (incrementSample && incrementSample.length > 0)
     incrementSample = incrementSample[0]
@@ -56,7 +56,7 @@ function dynamicRandomIncrement() {
       newSamples.push.apply(newSamples, groups[i]);
     }
   }
-  for (let idx = 0; idx < 10; idx++) {
+  for (let idx = 0; idx < 1; idx++) {
     let smp = index.dynamicRandomIncrement({ dyncFieds: index.clone(dyncFieds), samples: newSamples, incrementSample, groups: sampleGroups, p })
     //groups = index.dynamicRandom({ dyncFieds: index.clone(dyncFieds), samples, groupNum: 4, groupProportion, p })//, type: 'standardDev'}) //type只支持standardDev（标准差，默认）和rangeMethod（极差法）
     console.log('incrementSample', smp)
@@ -64,7 +64,7 @@ function dynamicRandomIncrement() {
 }
 //动态
 function dynamicRandom() {
-  samples = getSamples(4 * 1000 - 1);
+  samples = getSamples(4 * 10000 - 1);
   //console.log(samples)
   console.log(`sampleCount=${samples.length}`)
   let dyncFieds = [
