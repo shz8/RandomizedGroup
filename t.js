@@ -14,7 +14,8 @@ let start = new Date()
 //blockRandom();//分区
 //stratifiedRandom();//分层
 //dynamicRandom()//动态（最小化）
-dynamicRandomIncrement()
+//dynamicRandomIncrement()
+simpleRandomIncrement();
 console.log(parseInt((new Date() - start) / 1000) + ':' + (new Date() - start) % 1000)
 //分层
 function stratifiedRandom() {
@@ -26,6 +27,13 @@ function stratifiedRandom() {
   ];
   groups = index.stratifiedRandom({ stratifieds, samples });
   printGroups();
+}
+//简单随机（增量）
+function simpleRandomIncrement() {
+  let groups = ['G001', 'G002', 'G003']
+  for (let i = 0; i < 10; i++) {
+    console.log(index.simpleRandomIncrement({ groups }))
+  }
 }
 //动态随机（增量）
 function dynamicRandomIncrement() {
@@ -44,7 +52,7 @@ function dynamicRandomIncrement() {
 
   let p = 0.86 //偏倚分配概率。应该在 1/groupNum<= p <= 1之间，p=1/groupNum为简单随机；p=1为确定分配到最小
 
-  groups = index.dynamicRandom({ dyncFieds: index.clone(dyncFieds), samples, groupNum: 2, groupProportion: [2,1], p })//, type: 'standardDev'}) //type只支持standardDev（标准差，默认）和rangeMethod（极差法）
+  groups = index.dynamicRandom({ dyncFieds: index.clone(dyncFieds), samples, groupNum: 2, groupProportion: [2, 1], p })//, type: 'standardDev'}) //type只支持standardDev（标准差，默认）和rangeMethod（极差法）
   let sampleGroups = []
   let newSamples = []
   index.addNOforSamples(groups, 5);
@@ -57,7 +65,7 @@ function dynamicRandomIncrement() {
     }
   }
   let tmp = []
-  for (let idx = 0; idx < 5; idx++) {
+  for (let idx = 0; idx < 1; idx++) {
     let smp = index.dynamicRandomIncrement({ dyncFieds: index.clone(dyncFieds), samples: newSamples, incrementSample, groups: sampleGroups, p, groupProportion: [2, 1] })
     //groups = index.dynamicRandom({ dyncFieds: index.clone(dyncFieds), samples, groupNum: 4, groupProportion, p })//, type: 'standardDev'}) //type只支持standardDev（标准差，默认）和rangeMethod（极差法）
     tmp.push(smp)
