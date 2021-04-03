@@ -31,9 +31,17 @@ function stratifiedRandom() {
 //简单随机（增量）
 function simpleRandomIncrement() {
   let groups = ['G001', 'G002', 'G003']
-  for (let i = 0; i < 10; i++) {
-    console.log(index.simpleRandomIncrement({ groups }))
+  samples = getSamples(1000);
+  let newSamples = []
+  for (let i = 0; i < samples.length; i++) {
+    newSamples.push(index.simpleRandomIncrement({groups,samples:newSamples,incrementSample:samples[i]}))
   }
+  console.log(newSamples)
+  for(let i=0;i<groups.length;i++){
+    let len = newSamples.filter(s=>s.groupNO == groups[i]).length
+    console.log(groups[i],len)
+  }
+
 }
 //动态随机（增量）
 function dynamicRandomIncrement() {
